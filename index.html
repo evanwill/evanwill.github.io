@@ -1,3 +1,6 @@
+---
+# home page
+---
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>evanwill</title>
 	<link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
-    <meta name="description" content="github profile page for evan will">
+    <meta name="description" content="project profile page for evanwill">
 	<meta name="author" content="Evan Will">
     <meta name="google-site-verification" content="OjuWxN8BaamXbM3FYLbGRCQ8s7YmFQbTg4hXeet3urY" />
 	<!--
@@ -28,7 +31,7 @@
 	<meta property="og:url" content="https://evanwill.org" />
 	<meta property="og:locale" content="en_US" />
 	<!-- schema.org JSON-LD -->
-	<script type="application/ld+json">{"@context":"http://schema.org","@type":"WebPage","headline":"evanwill", "description":"github profile page for evan will", "image":"evanwill.png","url":"https://evanwill.org"}</script> 
+	<script type="application/ld+json">{"@context":"http://schema.org","@type":"WebPage","headline":"evanwill", "description":"project profile page for evanwill", "image":"evanwill.png","url":"https://evanwill.org"}</script> 
     
 	<style>
 		/* press-start-2p-regular - latin */
@@ -39,13 +42,18 @@
 			font-weight: 400;
 			src: url('../assets/lib/press-start-2p-v15-latin-regular.woff2') format('woff2'); 
 		}
+	
 		body { 
-			padding: 6% 0;
+			padding-top: 4%;
+			padding-left: 6%;
+			padding-right: 2em;
+			padding-bottom: 10em;
 			background-color: #FCFFF7;
-			color: #6F6866;
+			color: #111;
+			font-size: 1.25rem;
+			font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 		}
 		.awesome {
-			text-align:center;
 			font-size: 40px;
 			font-family: 'Press Start 2P';
 			color: #00cc00;
@@ -63,19 +71,98 @@
 			margin-top: 35px; 
 			color: #515959;
 		}
-		p { text-align:center; }
+		
 		a { 
 			text-decoration:none;
-			color: #38302E;
+			color: #111;
 		}
 		a:visited {
 			text-decoration:none;
-			color: #38302E;
+			color: #111;
 		}
 		a:hover {
 			text-decoration: underline;
 		}
 		.awesome a { color: #00cc00; }
+
+		h2 { 
+			font-size: 1.6rem;
+			margin-bottom: 0.5rem;
+			font-weight: 500;
+		}
+		.search {
+			background-color: #FCFFF7;
+			border: solid 1px #00cc00;
+			border-radius: 5px;
+			font-size: 1rem;
+			padding: 4px 8px;
+		}
+		.buttons {
+			cursor: pointer;
+			background-color: #FCFFF7;
+			border: solid 1px #00cc00;
+			border-radius: 5px;
+			font-size: 1rem;
+			margin-top: 5px;
+			padding: 4px 8px;
+			text-align: center;
+		}
+		.buttons:focus { outline:none; }
+		.sort { 
+			background-color: #FCFFF7;
+			color: #111;
+		}
+		.sort:focus {
+			outline:none;
+		}
+		.sort:after {
+			display:inline-block;
+			width: 0;
+			height: 0;
+			border-left: 5px solid transparent;
+			border-right: 5px solid transparent;
+			border-bottom: 5px solid transparent;
+			content:"";
+			position: relative;
+			top:-10px;
+			right:-5px;
+		}
+		.sort.asc:after {
+			width: 0;
+			height: 0;
+			border-left: 5px solid transparent;
+			border-right: 5px solid transparent;
+			border-top: 5px solid black;
+			content:"";
+			position: relative;
+			top:4px;
+			right:-5px;
+		}
+		.sort.desc:after {
+			width: 0;
+			height: 0;
+			border-left: 5px solid transparent;
+			border-right: 5px solid transparent;
+			border-bottom: 5px solid black;
+			content:"";
+			position: relative;
+			top:-4px;
+			right:-5px;
+		}
+
+		ul { 
+			list-style: none;
+			margin-top: 1rem;
+			margin-bottom: 1rem;
+			padding-left: 1rem;
+		}
+		li {
+			margin-bottom: 0.5em;
+		}
+		.info {
+			margin-left: 1rem;
+		}
+		.hidden { visibility: hidden; }
 		
 	</style>
 	<!-- Matomo -->
@@ -99,61 +186,69 @@
 
 	<h1 class="awesome"><a href="https://github.com/evanwill" >evanwill</a></h1>
 
-	<p><a href="https://evanwill.github.io/pastyAware/">#PastyAware</a></p>
+	<h2>Project Links</h2>
+
+	<div id="projectlist" class="projectlist">
+
+		<div class="browse">
+			<input class="search" placeholder=" Search" type="text" aria-label="Search projects">
+			Sort:
+			<button class="buttons sort" data-sort="title">Title</button>
+			<button class="buttons sort" data-sort="date">Date</button>
+
+			Filter:
+			{% assign categories = "Blog;Fun;Workshop;Project;Sketch" | split: ";" %}
+			{% for c in categories %}
+			<button class="buttons filter-buttons" onclick="filterByCategory('{{ c }}')">{{ c }}</button>
+			{% endfor %}
+			<button id="view-all" class="buttons filter-buttons">All</button>
+		</div>
+
+		<ul class="listjs">
+			{% for p in site.data.projects %}
+			<li>
+				<div><a href="{{ p.link }}"><span class="title">{{ p.title }}</span></a></div>
+				<div class="info">
+					<small>
+						<span class="category">{{ p.category }}</span>{% if p.date %} <span class="date">{{ p.date }}</span>{% endif %}.
+						{% if p.description %}<span class="description">{{ p.description }}</span> {% endif %}
+						{% if p.old_link %}(<a href="{{ p.old_link }}">older version</a>){% endif %}
+					</small>
+				</div>
+			</li>
+			{% endfor %}
+		</ul>
+
+	</div>
 	
-	<p class="section"><em>TECH BLOG:</em></p>
+	<p class="hidden"><em><a rel="me" href="https://hcommons.social/@evanwill">Mastodon</a></em></p>
 
-	<p><a href="https://evanwill.github.io/_drafts/">_drafts</a></p>
-	
-	<p class="section"><em>WORKSHOPS:</em></p>
+	<!-- add list.js http://www.listjs.com/ @javve -->
+	<script src="{{ '/assets/lib/list.min.js' | relative_url }}"></script>
+	<script>
 
-	<p><a href="https://evanwill.github.io/go-go-ghpages-b/">Go-Go GH-Pages</a> v.2 <small>(older: <a href="https://evanwill.github.io/go-go-ghpages/">go-go gh-pages</a>)</small></p>
-	<p><a href="https://evanwill.github.io/get-git-b/">Get Git!</a> <small>(older: <a href="https://evanwill.github.io/get-git/">Introduction to Version Control</a>)</small></p>
-	<p><a href="https://evanwill.github.io/openrefine-b/">Get Started with OpenRefine</a> <small>(older: <a href="https://evanwill.github.io/clean-your-data/">Clean Your Data</a>)</small></p>
-	<p><a href="https://evanwill.github.io/refine-with-grel/">OpenRefine: Advanced Data Transformation with GREL Expressions (Refine with GREL!)</a></p>
-	<p><a href="https://evanwill.github.io/hello-arduino-b/">Hello Arduino: Introducing Microcontrollers, Code, and Simple Circuits for Everyone!</a></p>
-	<p><a href="https://evanwill.github.io/hey-api/">Hey API!</a></p>
-	<p><a href="https://evanwill.github.io/refine-apis/">Refine APIs!</a></p>
-	<p><a href="https://evanwill.github.io/power-browser/">Become a Power Browser --> Understanding How the Web Works!</a></p>
-	<p><a href="https://evanwill.github.io/web-crash-course/">Web Crash Course</a> (or <a href="https://evanwill.github.io/mini-web-crash-course/">Mini- Web Crash Course</a>)</p>
-	<p><a href="https://evanwill.github.io/write-md/">write-md: Markdown and Pandoc for Academic Writing</a></p>
-	<p><a href="https://evanwill.github.io/markdown-everywhere/">Write Markdown *Everywhere*</a></p>
-	<p><a href="https://evanwill.github.io/charts-lie/">Data Visualization Literacy: How Bad Charts Lie!</a></p>
-	<p><a href="https://evanwill.github.io/web-cites/">web-cites: Web Archiving to Fight Link Rot and Preserve Your Citations</a></p>
-	<p><a href="https://evanwill.github.io/try-linux/">Try Linux!</a></p>
-	<p><a href="https://evanwill.github.io/make-oer/">Make OER!</a></p>
-	<p><a href="https://evanwill.github.io/tech-hands-on/">Teaching Tech Hands-on</a></p>
-	<p><a href="https://uidaholib.github.io/make-at-the-mill/">Make @ the MILL</a></p>
-	<p>Digital Scholarship Symposium <a href="https://github.com/PalouseDH/symposium">2019, 2018</a>, <a href="https://github.com/uidaholib/cdil-summer2017">2017</a></p>
-	<p><a href="https://programminghistorian.org/en/lessons/fetch-and-parse-data-with-openrefine">Fetching and Parsing Data from the Web with OpenRefine</a></p>
-	
-	<p class="section"><em>PROJECTS:</em></p>
+		// filter by category function
+		function filterByCategory(filter_category) {
+			userList.filter( function(item) {
+				var cat = item.values().category;
+				if (cat.indexOf(filter_category) != -1) {
+					return true;
+				} else {
+					return false;
+				}
+			})
+		};
 
-	<p><a href="https://collectionbuilder.github.io/">CollectionBuilder</a> <em>(static web framework for creating digital collection websites driven by metadata)</em></p>
-	<p><a href="https://lib-static.github.io">Lib-Static</a> <em>(a methodology)</em></p>
-	<p><a href="https://github.com/learn-static">Learn-Static</a> <em>(teaching DH with static web)</em></p>
-	<p><a href="https://github.com/learn-static/lesson-template">lesson-template</a> <em>(simple workshop website template with sidebar)</em></p>
-	<p><a href="https://evanwill.github.io/workshop-template-b/">workshop-template-b</a> <em>(simple workshop website template with bootstrap)</em></p>
-	<p><a href="https://evanwill.github.io/workshop-template/">workshop-template</a> <em>(minimal template for creating workshop lesson sites)</em></p>
-	<p><a href="https://evanwill.github.io/beowulf-s/">Beowulf-s</a> <em>(public domain text and data)</em></p>
-	<p><a href="https://intmus.github.io/">Integrated Musicianship</a> <em>(OER textbook)</em></p>
-	<p><a href="https://github.com/evanwill/poemBot">poemBot</a> <em>(raspberry pi printer project)</em></p>
-	<p><a href="https://evanwill.github.io/aladore-book/">aladore-book</a> and <a href="https://digitalaladore.wordpress.com/">Digital Aladore</a> <em>(public domain text and data)</em></p>
-	<p><a href="https://evanwill.github.io/morris-wondrous-isles-book/">morris-wondrous-isles-book</a> <em>(William Morris, public domain text and data)</em></p>
+		var options = {
+			valueNames: [ 'category', 'title', 'date', 'description' ],
+			listClass: 'listjs'
+		};
+		var userList = new List('projectlist', options);
 
-	<p class="section"><em>SKETCHES:</em></p>
+		// reset filter
+		document.getElementById('view-all').onclick = function() { userList.filter(); };
 
-	<p><a href="https://github.com/thecdil/bootstrap5-template">bootstrap5-template</a> or <a href="https://github.com/thecdil/bootstrap-template">bootstrap-template</a></p>
-	<p><a href="https://github.com/thecdil/timelinejs-template">timelinejs-template</a></p>
-	<p><a href="https://evanwill.github.io/basic-book/">basic-book</a></p>
-	<p><a href="https://evanwill.github.io/lightning-time/">lighting-time</a> or customizable <a href="https://github.com/evanwill/countdown-timer">countdown-timer</a></p>
-	<p><a href="https://evanwill.github.io/academic-librarian-status/">academic-librarian-status</a></p>
-	<p><a href="https://evanwill.github.io/sphere-view/">sphere-view</a></p>
-	<p><a href="https://github.com/evanwill/antirubbersheet-test">antirubbersheet-test</a></p>
-	<p><a href="https://evanwill.github.io/p5tests/index.html">p5tests</a></p>
-	<p><a href="https://uidaholib.github.io/poemchoice/">poem choice</a></p>
-	
-	<p class="section"><em><a rel="me" href="https://hcommons.social/@evanwill">Mastodon</a></em></p>
+	</script>
 
 </body>
 
