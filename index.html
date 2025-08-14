@@ -44,7 +44,7 @@
 		}
 	
 		body { 
-			padding-top: 4%;
+			padding-top: 2%;
 			padding-left: 6%;
 			padding-right: 2em;
 			padding-bottom: 10em;
@@ -75,6 +75,7 @@
 		a { 
 			text-decoration:none;
 			color: #111;
+			font-weight: 500;
 		}
 		a:visited {
 			text-decoration:none;
@@ -160,9 +161,10 @@
 			margin-bottom: 0.5em;
 		}
 		.info {
-			margin-left: 1rem;
+			margin-left: 1.5rem;
 		}
 		.hidden { visibility: hidden; }
+		.active-filter { border: solid 1px #111; }
 		
 	</style>
 	<!-- Matomo -->
@@ -199,9 +201,9 @@
 			Filter:
 			{% assign categories = "Blog;Fun;Workshop;Project;Sketch" | split: ";" %}
 			{% for c in categories %}
-			<button class="buttons filter-buttons" onclick="filterByCategory('{{ c }}')">{{ c }}</button>
+			<button class="buttons filter-buttons" onclick="filterByCategory('{{ c }}', event)">{{ c }}</button>
 			{% endfor %}
-			<button id="view-all" class="buttons filter-buttons">All</button>
+			<button class="buttons filter-buttons active-filter" onclick="filterByCategory('view-all', event)">All</button>
 		</div>
 
 		<ul class="listjs">
@@ -228,25 +230,33 @@
 	<script>
 
 		// filter by category function
-		function filterByCategory(filter_category) {
-			userList.filter( function(item) {
-				var cat = item.values().category;
-				if (cat.indexOf(filter_category) != -1) {
-					return true;
-				} else {
-					return false;
-				}
-			})
-		};
+		function filterByCategory(filter_category, event) {
+			// Remove "active" class from all filter-buttons
+			var buttons = document.querySelectorAll('.filter-buttons');
+			buttons.forEach(function(btn) {
+				btn.classList.remove('active-filter');
+			});
+			// Add "active" class to the clicked button
+			if (event && event.target) {
+				event.target.classList.add('active-filter');
+			}
+			// Filter the list
+			if (filter_category == "view-all") {
+				// reset filters
+				userList.filter();
+			} else {
+				userList.filter(function(item) {
+					var cat = item.values().category;
+					return cat.indexOf(filter_category) != -1;
+				});
+			}
+		}
 
 		var options = {
 			valueNames: [ 'category', 'title', 'date', 'description' ],
 			listClass: 'listjs'
 		};
 		var userList = new List('projectlist', options);
-
-		// reset filter
-		document.getElementById('view-all').onclick = function() { userList.filter(); };
 
 	</script>
 
