@@ -199,7 +199,7 @@
 			<button class="buttons sort" data-sort="date">Date</button>
 
 			Filter:
-			{% assign categories = "Blog;Fun;Workshop;Project;Sketch" | split: ";" %}
+			{% assign categories = "Blog;Fun;Workshop;Project;Template;Sketch" | split: ";" %}
 			{% for c in categories %}
 			<button class="buttons filter-buttons" onclick="filterByCategory('{{ c }}', event)">{{ c }}</button>
 			{% endfor %}
